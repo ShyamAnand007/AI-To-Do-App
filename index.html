@@ -162,23 +162,43 @@
             const save = () => localStorage.setItem('tasks', JSON.stringify(tasks));
 
             // --- AI Logic (Updated Path) ---
-            async function callAI(prompt, isJson = false) {
-                document.getElementById('modalTitle').innerText = "AI Thinking...";
-                document.getElementById('modalBody').innerHTML = '<div class="loader"></div>';
-                modal.classList.add('visible');
-                try {
-                    const res = await fetch('/api/ai-handler', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ payload: { 
-                            contents: [{ parts: [{ text: prompt }] }],
-                            generationConfig: isJson ? { responseMimeType: "application/json" } : {}
-                        }})
-                    });
-                    const data = await res.json();
-                    return data.candidates[0].content.parts[0].text;
-                } catch (e) { return "Error: Check Vercel logs!"; }
-            }
+            // --- THE SECRET WEAPON: Improved AI Helper ---
+async function callAI(prompt, isJson = false) {
+    const modal = document.getElementById('modal');
+    document.getElementById('modalTitle').innerText = "AI is thinking...";
+    document.getElementById('modalBody').innerHTML = '<div class="loader"></div>';
+    modal.classList.add('visible');
+
+    try {
+        const response = await fetch('/api/ai-handler', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ payload: { 
+                contents: [{ parts: [{ text: prompt }] }],
+                // Forces raw JSON for Breakdown and Prioritize features
+                generationConfig: isJson ? { responseMimeType: "application/json" } : {}
+            }})
+        });
+        
+        const data = await response.json();
+        
+        // Error handling if Google sends a message back
+        if (data.error) return `AI Error: ${data.error.message}`;
+
+        let aiText = data.candidates[0].content.parts[0].text;
+
+        // --- THE MASTER CLEANER ---
+        // This strips away markdown blocks so the app can parse the data correctly
+        if (isJson) {
+            aiText = aiText.replace(/```json/g, '').replace(/```/g, '').trim();
+        }
+
+        return aiText;
+    } catch (e) {
+        console.error("Connection Error:", e);
+        return "Error: Could not connect to the AI kitchen.";
+    }
+}
 
             // --- AI Features ---
             document.getElementById('suggestPlanBtn').onclick = async () => {
@@ -243,3 +263,4 @@
     </script>
 </body>
 </html>
+
