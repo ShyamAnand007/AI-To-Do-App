@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My AI To-Do List</title>
+    <title>AI To-Do List ✅</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { --bg-color: #e0e5ec; --text-color: #3e5067; --accent-color: #3b82f6; }
+        :root { --bg-color: #e0e5ec; --text-color: #3e5067; }
         body { font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: var(--text-color); }
         .neumorphic-card { border-radius: 20px; box-shadow: 6px 6px 12px #a3b1c6, -6px -6px 12px #ffffff; background: var(--bg-color); }
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 50; }
@@ -26,29 +25,31 @@
 
         <div class="neumorphic-card p-4 mb-8 flex gap-3">
             <input type="text" id="taskInput" placeholder="Add a task..." class="flex-1 p-3 rounded-lg bg-transparent border-2 border-gray-300 focus:outline-none">
-            <button id="addTaskBtn" class="bg-blue-500 text-white px-6 py-2 rounded-lg font-bold">Add</button>
+            <button id="addTaskBtn" class="bg-blue-500 text-white px-6 py-2 rounded-lg font-bold hover:bg-blue-600 transition">Add</button>
         </div>
 
         <div id="taskList" class="space-y-4"></div>
 
         <div class="fixed bottom-8 right-8 flex flex-col gap-4">
-            <button id="suggestPlanBtn" class="neumorphic-card p-4 text-blue-500 font-bold">✨ AI Plan</button>
-            <button id="prioritizeTasksBtn" class="neumorphic-card p-4 text-green-500 font-bold">✨ AI Prioritize</button>
+            <button id="suggestPlanBtn" class="neumorphic-card p-4 text-blue-500 font-bold hover:scale-105 transition">✨ AI Plan</button>
+            <button id="prioritizeTasksBtn" class="neumorphic-card p-4 text-green-500 font-bold hover:scale-105 transition">✨ AI Prioritize</button>
         </div>
     </div>
 
     <div id="modal" class="modal-overlay">
         <div class="neumorphic-card p-8 max-w-sm w-full">
             <h2 id="modalTitle" class="text-xl font-bold mb-4"></h2>
-            <div id="modalBody"></div>
-            <button id="closeModalBtn" class="mt-6 text-blue-500 font-bold">Close</button>
+            <div id="modalBody" class="text-sm leading-relaxed"></div>
+            <button id="closeModalBtn" class="mt-6 text-blue-500 font-bold border-t w-full pt-4">Close</button>
         </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // 1. Data State
             let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
 
+            // 2. Element Selectors
             const taskInput = document.getElementById('taskInput');
             const addTaskBtn = document.getElementById('addTaskBtn');
             const taskList = document.getElementById('taskList');
@@ -56,30 +57,32 @@
             const modalTitle = document.getElementById('modalTitle');
             const modalBody = document.getElementById('modalBody');
 
-            // --- FUNCTIONS ---
+            // 3. Core Functions
             const saveTasks = () => localStorage.setItem('tasks', JSON.stringify(tasks));
 
             const renderTasks = () => {
                 taskList.innerHTML = '';
                 tasks.forEach(task => {
                     const card = document.createElement('div');
-                    card.className = "neumorphic-card p-4 flex justify-between items-center";
+                    card.className = "neumorphic-card p-4 flex justify-between items-center fade-in";
                     card.innerHTML = `
                         <div class="flex items-center gap-3">
-                            <input type="checkbox" ${task.completed ? 'checked' : ''} class="w-5 h-5">
+                            <input type="checkbox" ${task.completed ? 'checked' : ''} class="w-5 h-5 cursor-pointer">
                             <span class="${task.completed ? 'line-through text-gray-400' : ''}">${task.text}</span>
-                            ${task.priority ? `<span class="text-xs bg-blue-100 text-blue-600 px-2 rounded">P${task.priority}</span>` : ''}
+                            ${task.priority ? `<span class="text-xs bg-blue-100 text-blue-600 px-2 rounded font-bold">P${task.priority}</span>` : ''}
                         </div>
-                        <button class="text-red-400 font-bold">Delete</button>
+                        <button class="text-red-400 font-bold hover:text-red-600">Delete</button>
                     `;
 
+                    // Interaction logic
                     card.querySelector('input').onclick = () => { task.completed = !task.completed; saveTasks(); renderTasks(); };
                     card.querySelector('button').onclick = () => { tasks = tasks.filter(t => t.id !== task.id); saveTasks(); renderTasks(); };
                     taskList.appendChild(card);
                 });
             };
 
-            async function callAI(prompt) {
+            // 4. AI Helper
+            async function callAI(userPrompt) {
                 modalTitle.innerText = "AI is thinking...";
                 modalBody.innerHTML = '<div class="loader"></div>';
                 modal.classList.add('visible');
@@ -88,16 +91,16 @@
                     const response = await fetch('/api/ai-handler', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ payload: { contents: [{ parts: [{ text: prompt }] }] } })
+                        body: JSON.stringify({ payload: { contents: [{ parts: [{ text: userPrompt }] }] } })
                     });
                     const data = await response.json();
                     return data.candidates[0].content.parts[0].text;
                 } catch (e) {
-                    return "Error: Backend not found. Check if your file is in /api folder!";
+                    return "Error: Backend unreachable. Check if your file is in /api folder!";
                 }
             }
 
-            // --- EVENTS ---
+            // 5. Button Listeners
             addTaskBtn.onclick = () => {
                 if (taskInput.value.trim()) {
                     tasks.unshift({ id: Date.now(), text: taskInput.value.trim(), completed: false });
@@ -106,27 +109,29 @@
             };
 
             document.getElementById('suggestPlanBtn').onclick = async () => {
+                if (tasks.length === 0) return alert("Add some tasks first!");
                 const list = tasks.map(t => t.text).join(', ');
-                const res = await callAI(`Give me a 1-sentence strategy for these tasks: ${list}`);
+                const res = await callAI(`Give me a 2-sentence strategy for these tasks: ${list}`);
                 modalTitle.innerText = "AI Action Plan";
                 modalBody.innerText = res;
             };
 
             document.getElementById('prioritizeTasksBtn').onclick = async () => {
+                if (tasks.length === 0) return alert("Add some tasks first!");
                 const list = tasks.map(t => t.text).join(', ');
-                const res = await callAI(`Prioritize these tasks from most to least important as a simple list: ${list}`);
-                modalTitle.innerText = "Priorities";
+                const res = await callAI(`Prioritize these tasks from most to least important: ${list}`);
+                modalTitle.innerText = "Your Priorities";
                 modalBody.innerText = res;
             };
 
             document.getElementById('closeModalBtn').onclick = () => modal.classList.remove('visible');
 
-            // Clock
+            // 6. Clock Logic
             setInterval(() => {
                 document.getElementById('live-clock').innerText = new Date().toLocaleTimeString();
             }, 1000);
 
-            // Initial Render
+            // 7. Initial Startup
             renderTasks();
         });
     </script>
