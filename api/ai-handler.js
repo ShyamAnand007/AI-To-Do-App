@@ -9,7 +9,7 @@ export default async function handler(req, res) {
     // This looks for the key you will later save in Vercel's settings
     const apiKey = process.env.GEMINI_API_KEY; 
 
-    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
 
     try {
         const response = await fetch(API_URL, {
@@ -26,3 +26,4 @@ export default async function handler(req, res) {
         res.status(500).json({ error: "The server kitchen had an error!" });
     }
 }
+
