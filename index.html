@@ -25,9 +25,7 @@
             --text-color-dark: #e0e5ec;
             --text-muted-color-dark: #8a9aaf;
         }
-        html {
-            scroll-behavior: smooth;
-        }
+        html { scroll-behavior: smooth; }
         html.dark {
             --bg-color: var(--bg-color-dark);
             --card-shadow-light: var(--card-shadow-light-dark);
@@ -41,46 +39,22 @@
             color: var(--text-color);
             transition: background-color 0.3s, color 0.3s;
         }
-
         .neumorphic-card {
             background-color: var(--bg-color);
             border-radius: 20px;
             box-shadow: 6px 6px 12px var(--card-shadow-light), -6px -6px 12px var(--card-shadow-dark);
             transition: box-shadow 0.2s ease;
         }
-        .neumorphic-card:hover {
-            box-shadow: 4px 4px 8px var(--card-shadow-light), -4px -4px 8px var(--card-shadow-dark);
-        }
-        .neumorphic-card:active, .active-press {
-             box-shadow: inset 4px 4px 8px var(--card-shadow-light), inset -4px -4px 8px var(--card-shadow-dark) !important;
-        }
+        .neumorphic-card:hover { box-shadow: 4px 4px 8px var(--card-shadow-light), -4px -4px 8px var(--card-shadow-dark); }
+        .neumorphic-card:active, .active-press { box-shadow: inset 4px 4px 8px var(--card-shadow-light), inset -4px -4px 8px var(--card-shadow-dark) !important; }
         .neumorphic-inset {
             background-color: var(--bg-color);
             border-radius: 12px;
             box-shadow: inset 4px 4px 8px var(--card-shadow-light), inset -4px -4px 8px var(--card-shadow-dark);
         }
-
-        .task-card.completed .task-text {
-            text-decoration: line-through;
-            color: var(--text-muted-color);
-        }
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-10px) scale(0.98); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        .fade-in-down {
-            animation: fadeInDown 0.4s ease-out forwards;
-        }
-        .loader {
-            border: 4px solid rgba(255,255,255,0.3);
-            border-top: 4px solid #fff;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-        /* Floating Action Button */
+        .task-card.completed .task-text { text-decoration: line-through; color: var(--text-muted-color); }
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-10px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        .fade-in-down { animation: fadeInDown 0.4s ease-out forwards; }
         .fab-container { position: fixed; bottom: 30px; right: 30px; z-index: 50; }
         .fab {
             width: 56px; height: 56px;
@@ -90,270 +64,42 @@
             box-shadow: 6px 6px 12px var(--card-shadow-light), -6px -6px 12px var(--card-shadow-dark);
             cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
         }
-        html.dark .fab {
-             background: linear-gradient(145deg, #30343c, #282c32);
-        }
-        .fab:active {
-             box-shadow: inset 4px 4px 8px var(--card-shadow-light), inset -4px -4px 8px var(--card-shadow-dark);
-        }
+        html.dark .fab { background: linear-gradient(145deg, #30343c, #282c32); }
         .fab-menu {
             position: absolute; bottom: 65px; right: 0;
             display: flex; flex-direction: column-reverse; align-items: flex-end; gap: 12px;
             visibility: hidden; opacity: 0; transform: translateY(15px) scale(0.95);
-            transform-origin: bottom right;
             transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
-        .fab-container.open .fab-menu {
-            visibility: visible; opacity: 1; transform: translateY(0) scale(1);
-        }
-        .fab-item {
-            display: flex; align-items: center; gap: 10px;
-            padding: 8px 16px; 
-            cursor: pointer; white-space: nowrap;
-        }
-        /* Dark Mode Toggle */
-        .theme-switch-wrapper { display: flex; align-items: center; }
+        .fab-container.open .fab-menu { visibility: visible; opacity: 1; transform: translateY(0) scale(1); }
+        .fab-item { display: flex; align-items: center; gap: 10px; padding: 8px 16px; cursor: pointer; white-space: nowrap; }
         .theme-switch { display: inline-block; height: 24px; position: relative; width: 48px; }
         .theme-switch input { display:none; }
-        .slider {
-            bottom: 0; cursor: pointer; left: 0; position: absolute; right: 0; top: 0; transition: .4s;
-            display: flex; justify-content: space-between; align-items: center; padding: 0 4px;
-        }
+        .slider { bottom: 0; cursor: pointer; left: 0; position: absolute; right: 0; top: 0; transition: .4s; display: flex; justify-content: space-between; align-items: center; padding: 0 4px; }
         .slider:before { background-color: #fff; bottom: 4px; content: ""; height: 16px; left: 4px; position: absolute; transition: .4s; width: 16px; border-radius: 50%; z-index: 1; }
-        .slider svg {
-            height: 14px; width: 14px;
-            transition: opacity 0.3s ease, transform 0.4s ease;
-            z-index: 2;
-        }
-        .slider .sun { color: #f59e0b; opacity: 1; transform: rotate(0deg); }
-        .slider .moon { color: var(--accent-color); opacity: 0; transform: rotate(-90deg); }
         input:checked + .slider:before { transform: translateX(24px); }
-        input:checked + .slider .sun { opacity: 0; transform: rotate(90deg); }
-        input:checked + .slider .moon { opacity: 1; transform: rotate(0deg); }
-
-        /* Modal Styles */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.5); display: flex;
-            align-items: center; justify-content: center; z-index: 100;
-            opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s;
-        }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 100; opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s; }
         .modal-overlay.visible { opacity: 1; visibility: visible; }
-        .modal-content {
-            background-color: var(--bg-color); color: var(--text-color);
-            padding: 24px; border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            width: 90%; max-width: 500px;
-            transform: scale(0.95); transition: transform 0.3s;
-        }
-        .modal-overlay.visible .modal-content { transform: scale(1); }
-        
-        /* Focus Mode Styles */
-        .focus-mode-overlay {
-            position: fixed; top: 0; left: 0;
-            width: 100%; height: 100%;
-            background-color: var(--bg-color);
-            z-index: 200;
-            display: flex; align-items: center; justify-content: center; flex-direction: column;
-            text-align: center;
-            opacity: 0; visibility: hidden;
-            transform: translateY(20px);
-            transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
-        }
-        .focus-mode-overlay.visible {
-            opacity: 1; visibility: visible; transform: translateY(0);
-        }
-        .timer-circle {
-            width: 300px; height: 300px;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; flex-direction: column;
-            margin-bottom: 2rem;
-            cursor: pointer;
-            transition: background 0.5s linear, transform 0.2s ease, box-shadow 0.2s ease;
-        }
-        .timer-circle:active { transform: scale(0.98); }
-        .timer-circle.running.work-session { animation: pulse-glow-work 2s infinite alternate ease-in-out; }
-        .timer-circle.running.break-session { animation: pulse-glow-break 2s infinite alternate ease-in-out; }
-        
-        @keyframes pulse-glow-work {
-            from { box-shadow: 6px 6px 12px var(--card-shadow-light), -6px -6px 12px var(--card-shadow-dark), 0 0 40px rgba(59, 130, 246, 0.3); }
-            to { box-shadow: 6px 6px 12px var(--card-shadow-light), -6px -6px 12px var(--card-shadow-dark), 0 0 60px rgba(59, 130, 246, 0.6); }
-        }
-        @keyframes pulse-glow-break {
-            from { box-shadow: 6px 6px 12px var(--card-shadow-light), -6px -6px 12px var(--card-shadow-dark), 0 0 40px rgba(16, 185, 129, 0.3); }
-            to { box-shadow: 6px 6px 12px var(--card-shadow-light), -6px -6px 12px var(--card-shadow-dark), 0 0 60px rgba(16, 185, 129, 0.6); }
-        }
+        .modal-content { background-color: var(--bg-color); color: var(--text-color); padding: 24px; border-radius: 12px; width: 90%; max-width: 500px; }
+        .focus-mode-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-color); z-index: 200; display: flex; align-items: center; justify-content: center; flex-direction: column; opacity: 0; visibility: hidden; transition: 0.3s; }
+        .focus-mode-overlay.visible { opacity: 1; visibility: visible; }
+        .timer-circle { width: 300px; height: 300px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-direction: column; margin-bottom: 2rem; }
         .timer-display { font-size: 5rem; font-weight: 700; }
-        .timer-status { font-size: 1.1rem; text-transform: uppercase; letter-spacing: 2px; opacity: 0.7; }
-        .btn {
-            padding: 0.75rem 2rem; border-radius: 8px; font-weight: 600; cursor: pointer;
-            transition: all 0.2s ease; text-transform: uppercase; letter-spacing: 1px;
-        }
-        
-        /* API Key Modal Styles */
-        #api-key-modal-overlay {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            z-index: 300;
-        }
-        .stars {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none;
-        }
-        .star {
-            position: absolute; background: white; border-radius: 50%;
-            animation: twinkle 3s infinite alternate;
-        }
-        @keyframes twinkle {
-            0% { opacity: 0.3; transform: scale(0.8); }
-            100% { opacity: 1; transform: scale(1.2); }
-        }
-        #api-key-modal .modal {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 25px; padding: 40px;
-            max-width: 500px; width: 90%;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
-            text-align: center; animation: slideIn 0.8s ease-out;
-            position: relative; overflow: hidden;
-        }
-        @keyframes slideIn {
-            0% { opacity: 0; transform: translateY(-50px) scale(0.8); }
-            100% { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        #api-key-modal .modal::before {
-            content: ''; position: absolute; top: -50%; left: -50%;
-            width: 200%; height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transform: rotate(45deg); animation: shimmer 3s infinite;
-        }
-        @keyframes shimmer {
-            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
-        }
-        .robot-head {
-            font-size: 60px; margin-bottom: 20px;
-            animation: bounce 2s infinite; display: inline-block;
-        }
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-10px); }
-            60% { transform: translateY(-5px); }
-        }
-        #api-key-modal h1 { color: #333; margin-bottom: 15px; font-size: 28px; font-weight: bold; }
-        #api-key-modal .subtitle { color: #666; margin-bottom: 30px; font-size: 16px; line-height: 1.5; }
-        .input-group { position: relative; margin-bottom: 25px; }
-        .api-input {
-            width: 100%; padding: 15px 20px;
-            border: 3px solid #e0e0e0; border-radius: 15px;
-            font-size: 16px; font-family: monospace;
-            background: rgba(255, 255, 255, 0.8); transition: all 0.3s ease;
-            outline: none; color: #333;
-        }
-        .api-input:focus {
-            border-color: #667eea; background: white; transform: scale(1.02);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
-        }
-        .input-label {
-            position: absolute; left: 20px; top: 50%; transform: translateY(-50%);
-            color: #999; font-size: 16px; pointer-events: none;
-            transition: all 0.3s ease; background: white; padding: 0 5px;
-        }
-        .api-input:focus + .input-label, .api-input:not(:placeholder-shown) + .input-label {
-            top: 0; font-size: 12px; color: #667eea; font-weight: bold;
-        }
-        .unlock-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;
-            border: none; padding: 15px 40px; border-radius: 25px; font-size: 18px;
-            font-weight: bold; cursor: pointer; transition: all 0.3s ease;
-            position: relative; overflow: hidden; margin: 10px;
-        }
-        .unlock-btn:hover {
-            transform: translateY(-3px); box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
-        }
-        .unlock-btn::before {
-            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.5s;
-        }
-        .unlock-btn:hover::before { left: 100%; }
-        .close-btn {
-            background: #ff6b6b; color: white; border: none; padding: 15px 40px;
-            border-radius: 25px; font-size: 18px; font-weight: bold;
-            cursor: pointer; transition: all 0.3s ease; margin: 10px;
-        }
-        .close-btn:hover { background: #ff5252; transform: translateY(-2px); }
-        .security-note {
-            background: rgba(255, 235, 59, 0.2); padding: 15px; border-radius: 10px;
-            margin-top: 20px; font-size: 14px; color: #666;
-            border-left: 4px solid #ffc107; text-align: left;
-        }
-        .loading { display: none; margin-top: 20px; color: #555;}
-        .spinner {
-            border: 3px solid #f3f3f3; border-top: 3px solid #667eea; border-radius: 50%;
-            width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 0 auto 10px;
-        }
-        .character-count { font-size: 12px; color: #999; margin-top: 5px; text-align: right; }
-
-        @keyframes slideOut {
-            0% { opacity: 1; transform: translateY(0) scale(1); }
-            100% { opacity: 0; transform: translateY(-50px) scale(0.8); }
-        }
-        .slide-out { animation: slideOut 0.5s ease-out forwards; }
-
-        /* Shepherd Tour Styles */
-        .shepherd-element {
-            background-color: var(--bg-color);
-            border-radius: 20px;
-            box-shadow: 6px 6px 12px var(--card-shadow-light), -6px -6px 12px var(--card-shadow-dark);
-            max-width: 400px;
-        }
-        .shepherd-header {
-            padding: 1rem 1rem 0;
-        }
-        .shepherd-title {
-            color: var(--text-color);
-            font-weight: 600;
-        }
-        .shepherd-text {
-            color: var(--text-muted-color);
-            padding: 0 1rem 1rem;
-            font-size: 0.9rem;
-        }
-        .shepherd-button {
-            background: var(--bg-color);
-            border: none;
-            margin: 0 0.25rem;
-            padding: 0.5rem 1.25rem;
-            border-radius: 10px;
-            color: var(--text-color);
-            cursor: pointer;
-            box-shadow: 4px 4px 8px var(--card-shadow-light), -4px -4px 8px var(--card-shadow-dark);
-            transition: box-shadow 0.2s ease;
-        }
-        .shepherd-button:hover {
-            box-shadow: 2px 2px 4px var(--card-shadow-light), -2px -2px 4px var(--card-shadow-dark);
-        }
-         .shepherd-button:active {
-            box-shadow: inset 2px 2px 4px var(--card-shadow-light), inset -2px -2px 4px var(--card-shadow-dark);
-        }
-        .shepherd-button-primary {
-            background: var(--accent-color);
-            color: white;
-        }
+        .btn { padding: 0.75rem 2rem; border-radius: 8px; font-weight: 600; cursor: pointer; text-transform: uppercase; }
+        .loader { border: 4px solid rgba(255,255,255,0.3); border-top: 4px solid #3b82f6; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 20px auto; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
     </style>
 </head>
-<body class="transition-colors duration-300">
+<body>
     <div id="main-content">
         <div class="container mx-auto p-4 sm:p-6 md:p-8 max-w-3xl min-h-screen">
-            <!-- Header -->
             <header class="flex justify-between items-start mb-8">
                 <div>
                     <h1 class="text-3xl sm:text-4xl font-bold flex items-center gap-3">
                         <span id="header-logo" class="p-2 neumorphic-card text-blue-500">AI</span>
                         <span>To-Do List</span>
                     </h1>
-                    <p id="greeting" class="text-sm mt-2"></p>
+                    <p id="greeting" class="text-sm mt-2 text-gray-500"></p>
                 </div>
                 <div class="flex items-center gap-4">
                     <button id="start-tour-btn" class="p-2 neumorphic-card">
@@ -366,21 +112,19 @@
                 </div>
             </header>
 
-            <!-- Task Input -->
             <div id="task-input-container" class="mb-8 p-1 rounded-xl neumorphic-card">
                 <div class="flex flex-col sm:flex-row items-center gap-3 p-2">
-                    <input type="text" id="taskInput" placeholder="Add a new task or a big goal..." class="flex-grow p-3 border-0 rounded-lg focus:outline-none w-full bg-transparent neumorphic-inset">
+                    <input type="text" id="taskInput" placeholder="Add a new task..." class="flex-grow p-3 border-0 rounded-lg focus:outline-none w-full bg-transparent neumorphic-inset">
                     <div class="flex items-center gap-4">
                         <button id="addTaskBtn" class="font-semibold px-6 py-3 rounded-lg transition duration-300 flex items-center justify-center gap-2 neumorphic-card">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-500"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                             <span class="text-blue-500">Add</span>
                         </button>
                         <div id="theme-switcher-container" class="theme-switch-wrapper neumorphic-card p-1 rounded-full">
                              <label class="theme-switch" for="checkbox">
                                 <input type="checkbox" id="checkbox" />
                                 <div class="slider round neumorphic-inset">
-                                    <svg class="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-                                    <svg class="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                                    <svg class="sun" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><circle cx="12" cy="12" r="5"></circle></svg>
+                                    <svg class="moon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
                                 </div>
                             </label>
                         </div>
@@ -388,18 +132,12 @@
                 </div>
             </div>
 
-            <!-- Task List -->
-            <main id="taskList" class="space-y-4">
-                <!-- Tasks will be dynamically added here -->
-            </main>
-            <div id="emptyState" class="text-center py-16">
-                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-4 opacity-50"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
-                <h3 class="text-xl font-semibold">All clear!</h3>
-                <p>Looks like you're all caught up. Add a new task to get started.</p>
+            <main id="taskList" class="space-y-4"></main>
+            <div id="emptyState" class="text-center py-16 hidden">
+                <h3 class="text-xl font-semibold opacity-50">All clear!</h3>
             </div>
         </div>
         
-        <!-- Floating Action Button for AI Features -->
         <div id="fab-container" class="fab-container">
             <div class="fab-menu">
                 <div id="focusModeBtn" class="fab-item neumorphic-card"><span>🎯 Focus</span></div>
@@ -408,198 +146,209 @@
                 <div id="prioritizeTasksBtn" class="fab-item neumorphic-card"><span>✨ Prioritize</span></div>
             </div>
             <div id="fab-main" class="fab">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l.34 3.03 3.03.34-3.03.34-.34 3.03-.34-3.03-3.03-.34 3.03-.34.34-3.03z"></path><path d="M4 12.55l.28 2.5 2.5.28-2.5.28-.28 2.5-.28-2.5-2.5-.28 2.5-.28.28-2.5z"></path><path d="M20 12.55l.28 2.5 2.5.28-2.5.28-.28 2.5-.28-2.5-2.5-.28 2.5-.28.28-2.5z"></path></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l.34 3.03 3.03.34-3.03.34-.34 3.03-.34-3.03-3.03-.34 3.03-.34.34-3.03z"></path></svg>
             </div>
         </div>
     </div>
 
-    <!-- General Purpose Modal -->
     <div id="modal" class="modal-overlay">
         <div class="modal-content neumorphic-card">
             <div class="flex justify-between items-center mb-4">
                 <h3 id="modalTitle" class="text-xl font-bold"></h3>
-                <button id="closeModalBtn" class="text-2xl leading-none">&times;</button>
+                <button id="closeModalBtn" class="text-2xl">&times;</button>
             </div>
             <div id="modalBody" class="max-h-[60vh] overflow-y-auto"></div>
-             <div class="text-right mt-6">
+            <div class="text-right mt-6">
                 <button id="closeModalBtn2" class="font-semibold px-4 py-2 rounded-md neumorphic-card">Close</button>
             </div>
         </div>
     </div>
     
-    <!-- Focus Mode Overlay -->
     <div id="focus-mode-overlay" class="focus-mode-overlay">
-        <div class="container mx-auto p-4">
-            <h1 class="text-4xl font-bold mb-2">Focus Mode</h1>
-            <p id="focus-task-display" class="mb-8"></p>
-            <div class="timer-circle neumorphic-card" id="timer-circle">
-                <div>
-                    <div class="timer-display" id="timer-display">25:00</div>
-                    <div class="timer-status" id="timer-status">Time to Work!</div>
-                </div>
-            </div>
-            <div class="flex justify-center gap-4 mb-8">
-                <button id="start-btn" class="btn neumorphic-card">Start</button>
-                <button id="pause-btn" class="btn neumorphic-card">Pause</button>
-                <button id="reset-btn" class="btn neumorphic-card">Reset</button>
-            </div>
-            <div class="mt-12">
-                 <button id="exit-focus-btn" class="transition">&larr; Back to To-Do List</button>
-            </div>
+        <h1 class="text-4xl font-bold mb-2">Focus Mode</h1>
+        <p id="focus-task-display" class="mb-8"></p>
+        <div class="timer-circle neumorphic-card" id="timer-circle">
+            <div class="timer-display" id="timer-display">25:00</div>
+            <div class="timer-status" id="timer-status">Time to Work!</div>
         </div>
-    </div>
-
-    <!-- API Key Modal -->
-    <div id="api-key-modal-overlay" class="modal-overlay">
-        <div id="api-key-modal">
-            <div class="stars" id="stars"></div>
-            <div class="modal">
-                <div class="robot-head">🤖</div>
-                <h1>🚀 Welcome to AI Command Center!</h1>
-                <p class="subtitle">
-                    To unlock the AI features, this app needs a Gemini API Key.<br>
-                    You can get a free key from Google's AI Studio.
-                </p>
-                <div class="input-group">
-                    <input type="password" class="api-input" id="apiKeyInput" placeholder=" ">
-                    <label class="input-label">Your Secret Gemini API Key 🔑</label>
-                </div>
-                <div class="character-count" id="charCount">0 characters</div>
-                <button id="saveApiKeyBtn" class="unlock-btn">
-                    🚀 Launch AI Experience
-                </button>
-                <button id="closeApiKeyModalBtn" class="close-btn">
-                    👋 Maybe Later
-                </button>
-                <div class="loading" id="apiKeyLoading">
-                    <div class="spinner"></div>
-                    <p>Verifying with the AI mothership... 🛸</p>
-                </div>
-                <div class="security-note">
-                    🔒 <strong>Super Secret Stuff:</strong> Your API key is saved only on YOUR device's browser storage. We're not peeking, promise! 🤞
-                </div>
-            </div>
+        <div class="flex gap-4">
+            <button id="start-btn" class="btn neumorphic-card">Start</button>
+            <button id="pause-btn" class="btn neumorphic-card">Pause</button>
+            <button id="reset-btn" class="btn neumorphic-card">Reset</button>
         </div>
+        <button id="exit-focus-btn" class="mt-12 text-gray-500">&larr; Back</button>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/js/shepherd.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-    // --- Global State ---
-    let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-    // NOTICE: We removed the apiKey variable! It lives in Vercel now.
+            // --- Global State ---
+            let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+            
+            // --- Core Elements ---
+            const taskInput = document.getElementById('taskInput');
+            const addTaskBtn = document.getElementById('addTaskBtn');
+            const taskList = document.getElementById('taskList');
+            const emptyState = document.getElementById('emptyState');
+            const fabContainer = document.getElementById('fab-container');
+            const fabMain = document.getElementById('fab-main');
+            const modal = document.getElementById('modal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.getElementById('modalBody');
 
-    // --- Elements (Keeping your original names) ---
-    const taskInput = document.getElementById('taskInput');
-    const addTaskBtn = document.getElementById('addTaskBtn');
-    const taskList = document.getElementById('taskList');
-    const emptyState = document.getElementById('emptyState');
-    const fabContainer = document.getElementById('fab-container');
-    const fabMain = document.getElementById('fab-main');
-    const suggestPlanBtn = document.getElementById('suggestPlanBtn');
-    const breakdownTaskBtn = document.getElementById('breakdownTaskBtn');
-    const prioritizeTasksBtn = document.getElementById('prioritizeTasksBtn');
-    const focusModeBtn = document.getElementById('focusModeBtn');
+            // --- Core Functions (FIXED!) ---
+            const saveTasks = () => localStorage.setItem('tasks', JSON.stringify(tasks));
 
-    // Modal Elements
-    const modal = document.getElementById('modal');
-    const modalTitle = document.getElementById('modalTitle');
-    const modalBody = document.getElementById('modalBody');
-    const closeModalBtn = document.getElementById('closeModalBtn');
-    const closeModalBtn2 = document.getElementById('closeModalBtn2');
+            const renderTasks = () => {
+                taskList.innerHTML = '';
+                emptyState.style.display = tasks.length === 0 ? 'block' : 'none';
 
-    // --- NEW: Simplified AI Logic ---
-    // This talks to your NEW Vercel backend!
-    async function callGeminiAPI(payload) {
-        try {
-            const response = await fetch('/api/ai-handler', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ payload })
-            });
-            if (!response.ok) throw new Error('Backend error');
-            return await response.json();
-        } catch (error) {
-            showModal("AI Error", "<p>Could not connect to the AI service. Make sure you are running on Vercel!</p>");
-            return null;
-        }
-    }
+                tasks.forEach(task => {
+                    const card = document.createElement('div');
+                    card.className = `task-card neumorphic-card flex items-start gap-4 p-4 fade-in-down ${task.completed ? 'completed opacity-60' : ''}`;
+                    
+                    card.innerHTML = `
+                        <input type="checkbox" ${task.completed ? 'checked' : ''} class="mt-1 h-5 w-5 cursor-pointer">
+                        <div class="flex-1">
+                            <p class="task-text font-medium ${task.completed ? 'line-through text-gray-400' : ''}">${task.text}</p>
+                            ${task.priority ? `<span class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full mt-1 inline-block">P${task.priority}</span>` : ''}
+                        </div>
+                        <div class="flex gap-2">
+                             <button class="focus-btn text-green-500">🎯</button>
+                             <button class="delete-btn text-red-500">🗑️</button>
+                        </div>
+                    `;
 
-    // --- AI Features (No more "withApiKey" needed!) ---
-    const suggestPlan = async () => {
-        fabContainer.classList.remove('open');
-        const uncompletedTasks = tasks.filter(t => !t.completed);
-        if (uncompletedTasks.length < 2) {
-            showModal("Plan", "Add at least 2 tasks first!");
-            return;
-        }
-        showModal("AI Plan", "Drafting your strategy...");
-        const taskListString = uncompletedTasks.map(t => `- ${t.text}`).join('\n');
-        const result = await callGeminiAPI({
-            contents: [{ parts: [{ text: `Create a plan for these tasks:\n${taskListString}` }] }]
-        });
-        if (result?.candidates?.[0]?.content?.parts?.[0]?.text) {
-            modalBody.innerHTML = `<p>${result.candidates[0].content.parts[0].text}</p>`;
-        }
-    };
+                    card.querySelector('input').addEventListener('change', () => {
+                        task.completed = !task.completed;
+                        saveTasks(); renderTasks();
+                    });
 
-    const breakdownTask = async () => {
-        fabContainer.classList.remove('open');
-        const text = taskInput.value.trim();
-        if (!text) return showModal("Breakdown", "Type a big goal in the input box first.");
-        
-        showModal("Breaking Down", "Thinking...");
-        const result = await callGeminiAPI({
-            contents: [{ parts: [{ text: `Break this into a JSON array of strings: ${text}` }] }],
-            generationConfig: { responseMimeType: "application/json" }
-        });
-        
-        if (result?.candidates?.[0]?.content?.parts?.[0]?.text) {
-            const subtasks = JSON.parse(result.candidates[0].content.parts[0].text);
-            subtasks.forEach(st => tasks.unshift({ id: Date.now() + Math.random(), text: st, completed: false, priority: null }));
-            saveTasks(); renderTasks(); hideModal(); taskInput.value = '';
-        }
-    };
+                    card.querySelector('.delete-btn').addEventListener('click', () => {
+                        tasks = tasks.filter(t => t.id !== task.id);
+                        saveTasks(); renderTasks();
+                    });
 
-    const prioritizeTasks = async () => {
-        fabContainer.classList.remove('open');
-        const uncompletedTasks = tasks.filter(t => !t.completed);
-        if (uncompletedTasks.length < 2) return;
+                    card.querySelector('.focus-btn').addEventListener('click', () => enterFocusMode(task.id));
 
-        showModal("Prioritizing", "Thinking...");
-        const taskListString = JSON.stringify(uncompletedTasks.map(t => t.text));
-        const result = await callGeminiAPI({
-            contents: [{ parts: [{ text: `Prioritize this JSON array: ${taskListString}` }] }],
-            generationConfig: { responseMimeType: "application/json" }
-        });
+                    taskList.appendChild(card);
+                });
+            };
 
-        if (result?.candidates?.[0]?.content?.parts?.[0]?.text) {
-            const prioritized = JSON.parse(result.candidates[0].content.parts[0].text);
-            tasks.forEach(t => {
-                const idx = prioritized.indexOf(t.text);
-                if (idx !== -1) t.priority = idx + 1;
-            });
-            saveTasks(); renderTasks(); hideModal();
-        }
-    };
+            // --- Clock & Greeting ---
+            const updateClock = () => {
+                const now = new Date();
+                document.getElementById('live-clock').textContent = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                document.getElementById('current-date').textContent = now.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' });
+                
+                const hr = now.getHours();
+                const greet = document.getElementById('greeting');
+                if(hr < 12) greet.textContent = "Good morning! What's the plan?";
+                else if(hr < 18) greet.textContent = "Good afternoon! Keep it going.";
+                else greet.textContent = "Good evening! Plan for tomorrow?";
+            };
+            setInterval(updateClock, 1000); updateClock();
 
-    // --- Event Listeners (Pointing to the new AI functions) ---
-    suggestPlanBtn.addEventListener('click', suggestPlan);
-    breakdownTaskBtn.addEventListener('click', breakdownTask);
-    prioritizeTasksBtn.addEventListener('click', prioritizeTasks);
+            // --- AI Backend Logic ---
+            async function callGeminiAPI(payload) {
+                try {
+                    const response = await fetch('/api/ai-handler', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ payload })
+                    });
+                    if (!response.ok) throw new Error('Server error');
+                    return await response.json();
+                } catch (e) {
+                    showModal("AI Error", "Make sure your GEMINI_API_KEY is set in Vercel!");
+                    return null;
+                }
+            }
 
-    // --- (Keeping all your existing Task, Clock, and Pomodoro code here) ---
-    // [I'm skipping pasting the rest to save space, but KEEP your renderTasks, Clock, and Focus Mode code!]
-    
-    // ... Paste your renderTasks(), saveTasks(), updateClock(), etc. back here ...
+            const suggestPlan = async () => {
+                const uncompleted = tasks.filter(t => !t.completed);
+                if (uncompleted.length < 2) return showModal("Plan", "Add at least 2 tasks first.");
+                showModal("AI Plan", "<div class='loader'></div>");
+                const list = uncompleted.map(t => `- ${t.text}`).join('\n');
+                const res = await callGeminiAPI({ contents: [{ parts: [{ text: `Create a strategy for: ${list}` }] }] });
+                if(res) modalBody.innerHTML = `<div class='p-2'>${res.candidates[0].content.parts[0].text.replace(/\n/g, '<br>')}</div>`;
+            };
 
-    const showModal = (title, content) => { modalTitle.innerHTML = title; modalBody.innerHTML = content; modal.classList.add('visible'); };
-    const hideModal = () => modal.classList.remove('visible');
-    [closeModalBtn, closeModalBtn2].forEach(btn => btn.addEventListener('click', hideModal));
+            const breakdownTask = async () => {
+                const text = taskInput.value.trim();
+                if (!text) return showModal("Breakdown", "Type a big goal in the box first.");
+                showModal("Breaking Down", "<div class='loader'></div>");
+                const res = await callGeminiAPI({ 
+                    contents: [{ parts: [{ text: `Break this into a JSON array of strings: ${text}` }] }],
+                    generationConfig: { responseMimeType: "application/json" }
+                });
+                if(res) {
+                    const subtasks = JSON.parse(res.candidates[0].content.parts[0].text);
+                    subtasks.forEach(s => tasks.unshift({ id: Date.now() + Math.random(), text: s, completed: false }));
+                    saveTasks(); renderTasks(); hideModal(); taskInput.value = '';
+                }
+            };
 
-    // Initialize
-    renderTasks();
-});
-    </script>
-</body>
-</html>
+            const prioritizeTasks = async () => {
+                const uncompleted = tasks.filter(t => !t.completed);
+                if (uncompleted.length < 2) return;
+                showModal("Prioritizing", "<div class='loader'></div>");
+                const res = await callGeminiAPI({
+                    contents: [{ parts: [{ text: `Prioritize these as a JSON list: ${JSON.stringify(uncompleted.map(t => t.text))}` }] }],
+                    generationConfig: { responseMimeType: "application/json" }
+                });
+                if(res) {
+                    const sorted = JSON.parse(res.candidates[0].content.parts[0].text);
+                    tasks.forEach(t => { const idx = sorted.indexOf(t.text); if(idx !== -1) t.priority = idx + 1; });
+                    saveTasks(); renderTasks(); hideModal();
+                }
+            };
+
+            // --- Pomodoro / Focus Mode ---
+            let timer; let seconds = 1500;
+            const updateTimerDisp = () => {
+                const m = Math.floor(seconds / 60); const s = seconds % 60;
+                document.getElementById('timer-display').textContent = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+            };
+            const enterFocusMode = (id) => {
+                const t = tasks.find(x => x.id === id);
+                document.getElementById('focus-task-display').textContent = t ? `Focusing on: ${t.text}` : "Let's focus!";
+                document.getElementById('focus-mode-overlay').classList.add('visible');
+            };
+            document.getElementById('start-btn').onclick = () => {
+                if(timer) return;
+                timer = setInterval(() => { if(seconds > 0) { seconds--; updateTimerDisp(); } else { clearInterval(timer); alert("Time's up!"); } }, 1000);
+            };
+            document.getElementById('pause-btn').onclick = () => { clearInterval(timer); timer = null; };
+            document.getElementById('reset-btn').onclick = () => { clearInterval(timer); timer = null; seconds = 1500; updateTimerDisp(); };
+            document.getElementById('exit-focus-btn').onclick = () => document.getElementById('focus-mode-overlay').classList.remove('visible');
+
+            // --- UI Listeners ---
+            fabMain.onclick = () => fabContainer.classList.toggle('open');
+            document.getElementById('suggestPlanBtn').onclick = suggestPlan;
+            document.getElementById('breakdownTaskBtn').onclick = breakdownTask;
+            document.getElementById('prioritizeTasksBtn').onclick = prioritizeTasks;
+            document.getElementById('focusModeBtn').onclick = () => enterFocusMode(null);
+            
+            addTaskBtn.onclick = () => {
+                if(taskInput.value.trim()){
+                    tasks.unshift({ id: Date.now(), text: taskInput.value.trim(), completed: false });
+                    saveTasks(); renderTasks(); taskInput.value = '';
+                }
+            };
+
+            const showModal = (title, body) => { modalTitle.textContent = title; modalBody.innerHTML = body; modal.classList.add('visible'); };
+            const hideModal = () => modal.classList.remove('visible');
+            document.getElementById('closeModalBtn').onclick = hideModal;
+            document.getElementById('closeModalBtn2').onclick = hideModal;
+
+            // --- Theme Switch ---
+            const themeToggle = document.getElementById('checkbox');
+            themeToggle.onchange = () => {
+                document.documentElement.classList.toggle('dark');
+                localStorage.setItem('theme', themeToggle.checked ? 'dark' : 'light');
+            };
+            if(localStorage.getItem('theme') === 'dark') { themeToggle.checked = true; document.documentElement.classList.add('dark'); }
+
+            // --- Tour ---
+            const tour = new Shepherd.Tour({ useModalOverlay: true, defaultStepOptions: { classes: 'neumorphic-card p-4', scrollTo
