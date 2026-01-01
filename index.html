@@ -1,137 +1,243 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI To-Do List ✅</title>
+    <title>My AI To-Do List</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/css/shepherd.css"/>
     <style>
-        :root { --bg-color: #e0e5ec; --text-color: #3e5067; }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: var(--text-color); }
-        .neumorphic-card { border-radius: 20px; box-shadow: 6px 6px 12px #a3b1c6, -6px -6px 12px #ffffff; background: var(--bg-color); }
-        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 50; }
+        :root {
+            --bg-color: #e0e5ec;
+            --card-shadow-light: #a3b1c6;
+            --card-shadow-dark: #ffffff;
+            --text-color: #3e5067;
+            --text-muted-color: #8a9aaf;
+            --accent-color: #3b82f6;
+            --bg-color-dark: #2c3038;
+            --card-shadow-light-dark: #25282e;
+            --card-shadow-dark-dark: #333842;
+            --text-color-dark: #e0e5ec;
+        }
+        html.dark {
+            --bg-color: var(--bg-color-dark);
+            --card-shadow-light: var(--card-shadow-light-dark);
+            --card-shadow-dark: var(--card-shadow-dark-dark);
+            --text-color: var(--text-color-dark);
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+        .neumorphic-card {
+            background-color: var(--bg-color);
+            border-radius: 20px;
+            box-shadow: 6px 6px 12px var(--card-shadow-light), -6px -6px 12px var(--card-shadow-dark);
+        }
+        .neumorphic-inset {
+            background-color: var(--bg-color);
+            border-radius: 12px;
+            box-shadow: inset 4px 4px 8px var(--card-shadow-light), inset -4px -4px 8px var(--card-shadow-dark);
+        }
+        .fab-container { position: fixed; bottom: 30px; right: 30px; z-index: 50; }
+        .fab {
+            width: 56px; height: 56px;
+            background: var(--bg-color);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            color: var(--accent-color);
+            box-shadow: 6px 6px 12px var(--card-shadow-light), -6px -6px 12px var(--card-shadow-dark);
+            cursor: pointer;
+        }
+        .fab-menu {
+            position: absolute; bottom: 65px; right: 0;
+            display: flex; flex-direction: column-reverse; align-items: flex-end; gap: 12px;
+            visibility: hidden; opacity: 0; transform: translateY(15px);
+            transition: all 0.2s ease;
+        }
+        .fab-container.open .fab-menu { visibility: visible; opacity: 1; transform: translateY(0); }
+        .fab-item { display: flex; align-items: center; gap: 10px; padding: 8px 16px; cursor: pointer; }
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 100; }
         .modal-overlay.visible { display: flex; }
-        .loader { border: 4px solid #f3f3f3; border-top: 4px solid #3b82f6; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 10px auto; }
+        .focus-overlay { position: fixed; inset: 0; background: var(--bg-color); z-index: 200; display: none; align-items: center; justify-content: center; flex-direction: column; }
+        .focus-overlay.visible { display: flex; }
+        .loader { border: 4px solid rgba(0,0,0,0.1); border-top: 4px solid var(--accent-color); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 20px auto; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
     </style>
 </head>
-<body class="p-8">
-    <div class="max-w-2xl mx-auto">
-        <header class="flex justify-between items-center mb-8">
-            <h1 class="text-3xl font-bold">AI To-Do List ✅</h1>
-            <div id="live-clock" class="text-xl font-mono"></div>
+<body>
+    <div class="container mx-auto p-4 max-w-3xl min-h-screen">
+        <header class="flex justify-between items-start mb-8">
+            <div>
+                <h1 class="text-3xl font-bold flex items-center gap-3">
+                    <span id="header-logo" class="p-2 neumorphic-card text-blue-500">AI</span>
+                    <span>To-Do List</span>
+                </h1>
+                <p id="greeting" class="text-sm mt-2 opacity-70"></p>
+            </div>
+            <div class="flex items-center gap-4">
+                <button id="start-tour-btn" class="p-2 neumorphic-card">Tour 🏁</button>
+                <div class="neumorphic-card p-3 text-right">
+                    <div id="live-clock" class="text-2xl font-bold"></div>
+                    <div id="current-date" class="text-xs"></div>
+                </div>
+            </div>
         </header>
 
-        <div class="neumorphic-card p-4 mb-8 flex gap-3">
-            <input type="text" id="taskInput" placeholder="Add a task..." class="flex-1 p-3 rounded-lg bg-transparent border-2 border-gray-300 focus:outline-none">
-            <button id="addTaskBtn" class="bg-blue-500 text-white px-6 py-2 rounded-lg font-bold hover:bg-blue-600 transition">Add</button>
+        <div id="task-input-container" class="mb-8 p-1 rounded-xl neumorphic-card">
+            <div class="flex flex-col sm:flex-row items-center gap-3 p-2">
+                <input type="text" id="taskInput" placeholder="Add a task..." class="flex-grow p-3 bg-transparent neumorphic-inset focus:outline-none w-full">
+                <div class="flex items-center gap-4">
+                    <button id="addTaskBtn" class="neumorphic-card px-6 py-3 text-blue-500 font-bold">Add</button>
+                    <button id="theme-toggle" class="neumorphic-card p-3">🌓</button>
+                </div>
+            </div>
         </div>
 
-        <div id="taskList" class="space-y-4"></div>
+        <main id="taskList" class="space-y-4"></main>
+        <div id="emptyState" class="text-center py-16 opacity-50 hidden">All clear! 🌟</div>
+    </div>
 
-        <div class="fixed bottom-8 right-8 flex flex-col gap-4">
-            <button id="suggestPlanBtn" class="neumorphic-card p-4 text-blue-500 font-bold hover:scale-105 transition">✨ AI Plan</button>
-            <button id="prioritizeTasksBtn" class="neumorphic-card p-4 text-green-500 font-bold hover:scale-105 transition">✨ AI Prioritize</button>
+    <div id="fab-container" class="fab-container">
+        <div class="fab-menu">
+            <div id="focusModeBtn" class="fab-item neumorphic-card">🎯 Focus</div>
+            <div id="suggestPlanBtn" class="fab-item neumorphic-card">✨ Plan</div>
+            <div id="breakdownTaskBtn" class="fab-item neumorphic-card">✨ Breakdown</div>
+            <div id="prioritizeTasksBtn" class="fab-item neumorphic-card">✨ Prioritize</div>
         </div>
+        <div id="fab-main" class="fab">🪄</div>
     </div>
 
     <div id="modal" class="modal-overlay">
-        <div class="neumorphic-card p-8 max-w-sm w-full">
-            <h2 id="modalTitle" class="text-xl font-bold mb-4"></h2>
-            <div id="modalBody" class="text-sm leading-relaxed"></div>
-            <button id="closeModalBtn" class="mt-6 text-blue-500 font-bold border-t w-full pt-4">Close</button>
+        <div class="neumorphic-card p-8 max-w-md w-full relative">
+            <h3 id="modalTitle" class="text-xl font-bold mb-4"></h3>
+            <div id="modalBody" class="max-h-60 overflow-y-auto text-sm leading-relaxed"></div>
+            <button id="closeModalBtn" class="mt-6 text-blue-500 font-bold w-full text-right">Close</button>
         </div>
     </div>
 
+    <div id="focus-overlay" class="focus-overlay">
+        <h1 class="text-4xl font-bold mb-4">Focus Mode</h1>
+        <p id="focus-task-display" class="mb-8 opacity-70"></p>
+        <div class="text-6xl font-bold mb-8" id="timer-display">25:00</div>
+        <div class="flex gap-4">
+            <button id="start-timer" class="neumorphic-card px-8 py-2 font-bold">Start</button>
+            <button id="exit-focus" class="px-8 py-2 opacity-50">Exit</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/js/shepherd.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // 1. Data State
             let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-
-            // 2. Element Selectors
+            
             const taskInput = document.getElementById('taskInput');
-            const addTaskBtn = document.getElementById('addTaskBtn');
             const taskList = document.getElementById('taskList');
+            const emptyState = document.getElementById('emptyState');
             const modal = document.getElementById('modal');
-            const modalTitle = document.getElementById('modalTitle');
-            const modalBody = document.getElementById('modalBody');
 
-            // 3. Core Functions
-            const saveTasks = () => localStorage.setItem('tasks', JSON.stringify(tasks));
-
+            // --- RENDER FUNCTION (The Core Fix) ---
             const renderTasks = () => {
                 taskList.innerHTML = '';
+                emptyState.classList.toggle('hidden', tasks.length > 0);
                 tasks.forEach(task => {
                     const card = document.createElement('div');
-                    card.className = "neumorphic-card p-4 flex justify-between items-center fade-in";
+                    card.className = `neumorphic-card p-4 flex justify-between items-center ${task.completed ? 'opacity-50' : ''}`;
                     card.innerHTML = `
                         <div class="flex items-center gap-3">
                             <input type="checkbox" ${task.completed ? 'checked' : ''} class="w-5 h-5 cursor-pointer">
-                            <span class="${task.completed ? 'line-through text-gray-400' : ''}">${task.text}</span>
-                            ${task.priority ? `<span class="text-xs bg-blue-100 text-blue-600 px-2 rounded font-bold">P${task.priority}</span>` : ''}
+                            <span class="${task.completed ? 'line-through' : ''}">${task.text}</span>
+                            ${task.priority ? `<span class="text-xs bg-blue-100 text-blue-600 px-2 rounded">P${task.priority}</span>` : ''}
                         </div>
-                        <button class="text-red-400 font-bold hover:text-red-600">Delete</button>
+                        <button class="delete-btn text-red-400 font-bold">Delete</button>
                     `;
-
-                    // Interaction logic
-                    card.querySelector('input').onclick = () => { task.completed = !task.completed; saveTasks(); renderTasks(); };
-                    card.querySelector('button').onclick = () => { tasks = tasks.filter(t => t.id !== task.id); saveTasks(); renderTasks(); };
+                    card.querySelector('input').onclick = () => { task.completed = !task.completed; save(); renderTasks(); };
+                    card.querySelector('.delete-btn').onclick = () => { tasks = tasks.filter(t => t.id !== task.id); save(); renderTasks(); };
                     taskList.appendChild(card);
                 });
             };
+            const save = () => localStorage.setItem('tasks', JSON.stringify(tasks));
 
-            // 4. AI Helper
-            async function callAI(userPrompt) {
-                modalTitle.innerText = "AI is thinking...";
-                modalBody.innerHTML = '<div class="loader"></div>';
+            // --- AI Logic (Updated Path) ---
+            async function callAI(prompt, isJson = false) {
+                document.getElementById('modalTitle').innerText = "AI Thinking...";
+                document.getElementById('modalBody').innerHTML = '<div class="loader"></div>';
                 modal.classList.add('visible');
-
                 try {
-                    const response = await fetch('/api/ai-handler', {
+                    const res = await fetch('/api/ai-handler', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ payload: { contents: [{ parts: [{ text: userPrompt }] }] } })
+                        body: JSON.stringify({ payload: { 
+                            contents: [{ parts: [{ text: prompt }] }],
+                            generationConfig: isJson ? { responseMimeType: "application/json" } : {}
+                        }})
                     });
-                    const data = await response.json();
+                    const data = await res.json();
                     return data.candidates[0].content.parts[0].text;
-                } catch (e) {
-                    return "Error: Backend unreachable. Check if your file is in /api folder!";
-                }
+                } catch (e) { return "Error: Check Vercel logs!"; }
             }
 
-            // 5. Button Listeners
-            addTaskBtn.onclick = () => {
-                if (taskInput.value.trim()) {
-                    tasks.unshift({ id: Date.now(), text: taskInput.value.trim(), completed: false });
-                    saveTasks(); renderTasks(); taskInput.value = '';
-                }
+            // --- AI Features ---
+            document.getElementById('suggestPlanBtn').onclick = async () => {
+                const res = await callAI(`Plan strategy for: ${tasks.map(t => t.text).join(', ')}`);
+                document.getElementById('modalTitle').innerText = "AI Plan";
+                document.getElementById('modalBody').innerText = res;
             };
 
-            document.getElementById('suggestPlanBtn').onclick = async () => {
-                if (tasks.length === 0) return alert("Add some tasks first!");
-                const list = tasks.map(t => t.text).join(', ');
-                const res = await callAI(`Give me a 2-sentence strategy for these tasks: ${list}`);
-                modalTitle.innerText = "AI Action Plan";
-                modalBody.innerText = res;
+            document.getElementById('breakdownTaskBtn').onclick = async () => {
+                if(!taskInput.value) return alert("Type a goal first!");
+                const res = await callAI(`Break into JSON list: ${taskInput.value}`, true);
+                JSON.parse(res).forEach(s => tasks.unshift({ id: Date.now()+Math.random(), text: s, completed: false }));
+                save(); renderTasks(); modal.classList.remove('visible'); taskInput.value = '';
             };
 
             document.getElementById('prioritizeTasksBtn').onclick = async () => {
-                if (tasks.length === 0) return alert("Add some tasks first!");
-                const list = tasks.map(t => t.text).join(', ');
-                const res = await callAI(`Prioritize these tasks from most to least important: ${list}`);
-                modalTitle.innerText = "Your Priorities";
-                modalBody.innerText = res;
+                const res = await callAI(`Prioritize as JSON list: ${JSON.stringify(tasks.map(t => t.text))}`, true);
+                const sorted = JSON.parse(res);
+                tasks.forEach(t => { const idx = sorted.indexOf(t.text); if(idx !== -1) t.priority = idx + 1; });
+                save(); renderTasks(); modal.classList.remove('visible');
             };
 
-            document.getElementById('closeModalBtn').onclick = () => modal.classList.remove('visible');
-
-            // 6. Clock Logic
+            // --- Clock & Theme ---
             setInterval(() => {
-                document.getElementById('live-clock').innerText = new Date().toLocaleTimeString();
+                const now = new Date();
+                document.getElementById('live-clock').innerText = now.toLocaleTimeString();
+                document.getElementById('current-date').innerText = now.toLocaleDateString();
+                const hr = now.getHours();
+                document.getElementById('greeting').innerText = hr < 12 ? "Morning!" : hr < 18 ? "Afternoon!" : "Evening!";
             }, 1000);
 
-            // 7. Initial Startup
+            document.getElementById('theme-toggle').onclick = () => document.documentElement.classList.toggle('dark');
+            document.getElementById('fab-main').onclick = () => document.getElementById('fab-container').classList.toggle('open');
+            document.getElementById('closeModalBtn').onclick = () => modal.classList.remove('visible');
+
+            // --- Add Task ---
+            document.getElementById('addTaskBtn').onclick = () => {
+                if(taskInput.value.trim()) {
+                    tasks.unshift({ id: Date.now(), text: taskInput.value.trim(), completed: false });
+                    save(); renderTasks(); taskInput.value = '';
+                }
+            };
+
+            // --- Focus Mode ---
+            let timer; let left = 1500;
+            document.getElementById('focusModeBtn').onclick = () => document.getElementById('focus-overlay').classList.add('visible');
+            document.getElementById('exit-focus').onclick = () => document.getElementById('focus-overlay').classList.remove('visible');
+            document.getElementById('start-timer').onclick = () => {
+                if(timer) return;
+                timer = setInterval(() => {
+                    if(left > 0) { left--; document.getElementById('timer-display').innerText = `${Math.floor(left/60)}:${(left%60).toString().padStart(2,'0')}`; }
+                }, 1000);
+            };
+
+            // --- Tour ---
+            const tour = new Shepherd.Tour({ useModalOverlay: true, defaultStepOptions: { classes: 'neumorphic-card p-4', scrollTo: true } });
+            tour.addStep({ title: 'AI Power', text: 'Use this menu for AI planning!', attachTo: { element: '#fab-main', on: 'left' }, buttons: [{ text: 'Exit', action: tour.complete }] });
+            document.getElementById('start-tour-btn').onclick = () => tour.start();
+
             renderTasks();
         });
     </script>
