@@ -6,7 +6,7 @@ export default async function handler(req, res) {
     const { payload } = req.body;
     const apiKey = process.env.GEMINI_API_KEY; 
 
-    // UPDATED: Using the 2026 stable Gemini 2.5 Flash model and v1 endpoint
+    // Using the 2026 stable Gemini 2.5 Flash model
     const API_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
 
     try {
@@ -18,7 +18,7 @@ export default async function handler(req, res) {
 
         const data = await response.json();
         
-        // Return the data to your frontend
+        // If the AI is sending JSON, we need to make sure we're sending the clean data back
         res.status(200).json(data);
     } catch (error) {
         res.status(500).json({ error: "The server kitchen had an error!" });
